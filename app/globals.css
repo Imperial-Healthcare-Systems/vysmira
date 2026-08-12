@@ -328,7 +328,7 @@ body.has-mobile-cta{padding-bottom:56px}
     linear-gradient(90deg,var(--brand-navy-900) 0%,rgba(10,31,51,.96) 30%,rgba(10,31,51,.74) 55%,rgba(10,31,51,.52) 100%),
     linear-gradient(180deg,rgba(20,81,60,.20),transparent 45%),
     radial-gradient(60% 50% at 85% 0%,rgba(201,162,39,.10),transparent 70%),
-    url("/img/hero-team.jpg");
+    url("/img/hero-home.png");
   background-size:cover;
   background-position:center right;
   background-repeat:no-repeat;
@@ -339,9 +339,18 @@ body.has-mobile-cta{padding-bottom:56px}
   .hero::before{
     background-image:
       linear-gradient(180deg,rgba(10,31,51,.82) 0%,rgba(10,31,51,.93) 55%,var(--brand-navy-900) 100%),
-      url("/img/hero-team.jpg");
+      url("/img/hero-home.png");
     background-position:72% center;
   }
+}
+
+/* Full-bleed photographic band between sections. Decorative only — the image
+   is set per instance with --band-img. */
+.photo-band{
+  height:clamp(200px,26vw,360px);
+  background-color:var(--brand-navy-900);
+  background-image:var(--band-img);
+  background-size:cover;background-position:center;background-repeat:no-repeat;
 }
 .hero .container{position:relative;padding-block:var(--s-10)}
 @media (min-width:1024px){.hero .container{padding-block:var(--s-12)}}
@@ -388,6 +397,25 @@ body.has-mobile-cta{padding-bottom:56px}
 /* Page hero (interior) */
 .page-hero{background:var(--brand-navy-900);color:var(--on-dark);position:relative;overflow:hidden}
 .page-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(20,81,60,.28),transparent 60%);pointer-events:none}
+/* Interior hero carrying a photograph. Set --hero-img per instance; the scrim
+   is heavier than the home hero because this band is shorter and the
+   breadcrumb sits on it. */
+.page-hero--photo::before{
+  background-image:
+    linear-gradient(90deg,var(--brand-navy-900) 0%,rgba(10,31,51,.94) 32%,rgba(10,31,51,.80) 62%,rgba(10,31,51,.64) 100%),
+    linear-gradient(120deg,rgba(20,81,60,.28),transparent 60%),
+    var(--hero-img);
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+}
+@media (max-width:1023px){
+  .page-hero--photo::before{
+    background-image:
+      linear-gradient(180deg,rgba(10,31,51,.88),rgba(10,31,51,.95)),
+      var(--hero-img);
+  }
+}
 .page-hero .container{position:relative;padding-block:var(--s-9) var(--s-10)}
 @media (min-width:1024px){.page-hero .container{padding-block:var(--s-10) var(--s-11)}}
 .page-hero h1{color:var(--on-dark);max-width:18ch;font-size:var(--text-h1)}

@@ -31,7 +31,27 @@ The single-file build stays the source of truth. `npm run generate` reads
 Art that isn't inlined lives in `Downloads/Vysmira/img/` next to the HTML, and
 is referenced from CSS with a **relative** path (`url("img/hero-team.jpg")`) so
 the standalone preview still works over `file://`. The generator copies those
-files into `public/` and rewrites the CSS to `url("/img/hero-team.jpg")`.
+files into `public/` and rewrites every `url()` — in the stylesheet and in
+inline `style` attributes — to `/img/…`, so nested routes don't resolve them
+against their own path.
+
+Current photography:
+
+| File | Placement |
+| --- | --- |
+| `hero-home.png` | `/` — `.hero` background |
+| `home-industries.png` | `/` — full-bleed `.photo-band` above the sectors list |
+| `how-we-work.png` | `/about/approach` — `.page-hero--photo` |
+| `founder-profile.png` | `/about/leadership` — `.page-hero--photo` |
+| `careers.png` | `/careers` — `.page-hero--photo` |
+| `contact.png` | `/contact` — `.page-hero--photo` |
+
+`.page-hero--photo` takes its image from a `--hero-img` custom property set per
+instance, so a new interior hero needs no new CSS:
+
+```html
+<section class="page-hero page-hero--photo" style="--hero-img:url('img/careers.png')">
+```
 
 Page markup is injected verbatim via `dangerouslySetInnerHTML`, so the original
 CSS class names and DOM structure are untouched and the design cannot drift.

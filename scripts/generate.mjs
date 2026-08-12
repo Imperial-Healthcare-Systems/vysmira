@@ -30,8 +30,13 @@ function externalise(html) {
 }
 
 /* ---- 2. Hash routes -> real Next.js paths ------------------------------ */
+// Image paths are relative in the preview build so it still works over
+// file://. Next serves the same files from /public, and a relative path would
+// otherwise resolve against a nested route (/careers/img/... -> 404).
+const absolutiseUrls = (s) => s.replace(/url\((["']?)(?!\/|https?:|data:)/g, 'url($1/');
+
 const rewrite = (html) =>
-  externalise(html)
+  absolutiseUrls(externalise(html))
     .replace(/href="#\/"/g, 'href="/"')
     .replace(/href="#\/([^"]*)"/g, 'href="/$1"');
 
@@ -56,12 +61,7 @@ fs.writeFileSync(
 );
 
 /* ---- 4. Design system -> app/globals.css ------------------------------- */
-// CSS image paths are relative in the preview build so it still works over
-// file://; Next serves the same files from /public.
-const css = /<style>([\s\S]*?)<\/style>/
-  .exec(src)[1]
-  .trim()
-  .replace(/url\((["']?)(?!\/|https?:|data:)/g, 'url($1/');
+const css = absolutiseUrls(/<style>([\s\S]*?)<\/style>/.exec(src)[1].trim());
 fs.writeFileSync(path.join(APP, 'globals.css'), css + '\n');
 
 // Copy any hand-placed art next to the preview build into public/.
