@@ -82,24 +82,37 @@ let js = src.slice(jsStart, src.indexOf('</script>', jsStart));
 // The single-file router re-ran the whole boot() on every hash change. Under
 // Next the header/nav survive navigation, so re-binding those would stack
 // duplicate listeners. Split boot into once-only chrome + per-page work.
+//
+// The two lists are derived from boot()'s actual body rather than hardcoded, so
+// anything added to boot() in the preview build flows through automatically.
+const CHROME_INITS = ['initHeader', 'initMegaMenus', 'initMobileNav', 'initMobileCta'];
+const bootBody = /function boot\(\) \{([\s\S]*?)\n  \}/.exec(js);
+if (!bootBody) throw new Error('could not locate boot() in the behaviour script');
+
+const calls = bootBody[1]
+  .split('\n')
+  .map((l) => l.trim())
+  .filter((l) => /^init[A-Za-z]*\(\);$|^mark[A-Za-z]*\(\);$/.test(l));
+const chromeCalls = calls.filter((c) => CHROME_INITS.some((n) => c === n + '();'));
+const pageCalls = calls.filter((c) => !chromeCalls.includes(c));
+
+const missing = CHROME_INITS.filter((n) => !chromeCalls.includes(n + '();'));
+if (missing.length) throw new Error(`boot() no longer calls: ${missing.join(', ')}`);
+if (!pageCalls.length) throw new Error('boot() has no page-scoped calls left to run per route');
+
+const indent = (list, pad) => list.map((c) => pad + c).join('\n');
 js = js.replace(
   /function boot\(\) \{[\s\S]*?\n  \}/,
   `function boot() {
     if (!window.__vysChromeBooted) {
       window.__vysChromeBooted = true;
-      initHeader();
-      initMegaMenus();
-      initMobileNav();
-      initMobileCta();
+${indent(chromeCalls, '      ')}
     }
     initPage();
   }
 
   function initPage() {
-    initReveal();
-    initCounters();
-    initForms();
-    markCurrent();
+${indent(pageCalls, '    ')}
   }`
 );
 js = js.replace('window.VYSMIRA = { boot: boot };', 'window.VYSMIRA = { boot: boot, initPage: initPage };');

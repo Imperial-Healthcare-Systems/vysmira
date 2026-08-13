@@ -295,6 +295,36 @@
     });
   }
 
+  /* ---- 7b. Biography dialogs -------------------------------------------- */
+  function initBios() {
+    document.querySelectorAll('[data-bio-open]').forEach(function (trigger) {
+      var dialog = document.getElementById(trigger.getAttribute('data-bio-open'));
+      if (!dialog || trigger.dataset.bioBound) return;
+      trigger.dataset.bioBound = '1';
+
+      trigger.addEventListener('click', function () {
+        if (typeof dialog.showModal === 'function') dialog.showModal();
+        else dialog.setAttribute('open', '');   // very old browsers: inline fallback
+      });
+
+      dialog.querySelectorAll('[data-bio-close]').forEach(function (btn) {
+        btn.addEventListener('click', function () { dialog.close(); });
+      });
+
+      // Click the backdrop — i.e. outside the dialog's own box — to dismiss.
+      dialog.addEventListener('click', function (e) {
+        if (e.target !== dialog) return;
+        var box = dialog.getBoundingClientRect();
+        var outside = e.clientX < box.left || e.clientX > box.right ||
+                      e.clientY < box.top || e.clientY > box.bottom;
+        if (outside) dialog.close();
+      });
+
+      // Escape is handled natively by <dialog>; restore focus on the way out.
+      dialog.addEventListener('close', function () { trigger.focus(); });
+    });
+  }
+
   /* ---- 8. Current-page highlight (single-file build) -------------------- */
   function markCurrent() {
     var path = document.body.getAttribute('data-page');
@@ -320,6 +350,7 @@
     initReveal();
     initCounters();
     initForms();
+    initBios();
     markCurrent();
   }
 
