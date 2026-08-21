@@ -103,6 +103,45 @@ prints a warning naming each job page instead. Add to the view tag in
 Location, employment type and reference number are already parsed from each
 job's `.cred-strip`.
 
+## Images and mobile weight
+
+Photographs are **WebP at two sizes**. Full-resolution originals live in
+`Downloads/Vysmira/img-src/` and are *not* deployed; `Downloads/Vysmira/img/`
+holds only what ships, and the generator wipes `public/img` on each run so
+removed files don't linger.
+
+| | desktop | phone (`≤640px`) |
+| --- | --- | --- |
+| file | `name.webp` (1672px) | `name-sm.webp` (900px) |
+| hero / page-hero / band | `--hero-img` / `--band-img` | `--hero-img-sm` / `--band-img-sm` |
+
+Backgrounds declare both custom properties inline; the `≤640px` rules read
+`var(--hero-img-sm, var(--hero-img))`, so a page that only declares the full
+image still works.
+
+To re-encode after replacing a source photo, put the original in `img-src/` and
+run the conversion with Pillow (quality 80 desktop / 78 mobile) — there is no
+image dependency in this project on purpose.
+
+Measured at 375px with cache disabled:
+
+| route | before | after |
+| --- | --- | --- |
+| `/` | 4241 KB | 268 KB |
+| `/contact` | 2641 KB | 216 KB |
+| `/careers` | 2334 KB | 196 KB |
+| `/about/leadership` | 2292 KB | 279 KB |
+
+Also: the header/footer mark is `img/vysmira-mark.webp` (38 KB) rather than the
+183 KB inline base64 it replaced, and the Google Fonts request dropped Source
+Serif's `opsz` axis — the two-axis variable file was 119 KB per page, the
+static weights are 50 KB.
+
+Touch targets follow WCAG 2.2 AA (24px) with 44px where practical; the rules
+live in one `@media (max-width:900px) and (pointer:coarse), (max-width:768px)`
+block so desktop density is untouched. Inline links inside sentences are left
+at text size, which the spec explicitly exempts.
+
 ## Not done yet
 
 Both forms (contact, CV upload) still carry `action="#"` from the preview build,

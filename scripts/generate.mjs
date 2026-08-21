@@ -14,6 +14,13 @@ const CMP = path.join(ROOT, 'components');
 const src = fs.readFileSync(SRC, 'utf8');
 const slice = (from, to) => src.slice(src.indexOf(from), src.indexOf(to) + to.length);
 
+// public/img is fully derived — extracted base64 assets plus whatever sits in
+// ../img. Clear it first so files removed from the source (e.g. originals
+// replaced by .webp) don't linger in the deploy.
+const PUB_IMG = path.join(PUB, 'img');
+fs.rmSync(PUB_IMG, { recursive: true, force: true });
+fs.mkdirSync(PUB_IMG, { recursive: true });
+
 /* ---- 1. Assets: pull inlined base64 PNGs out into public/ --------------- */
 const assets = new Map(); // base64 -> public path
 function externalise(html) {

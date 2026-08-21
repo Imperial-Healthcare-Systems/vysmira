@@ -328,7 +328,7 @@ body.has-mobile-cta{padding-bottom:56px}
     linear-gradient(90deg,var(--brand-navy-900) 0%,rgba(10,31,51,.96) 30%,rgba(10,31,51,.74) 55%,rgba(10,31,51,.52) 100%),
     linear-gradient(180deg,rgba(20,81,60,.20),transparent 45%),
     radial-gradient(60% 50% at 85% 0%,rgba(201,162,39,.10),transparent 70%),
-    url("/img/hero-home.png");
+    url("/img/hero-home.webp");
   background-size:cover;
   background-position:center right;
   background-repeat:no-repeat;
@@ -339,8 +339,17 @@ body.has-mobile-cta{padding-bottom:56px}
   .hero::before{
     background-image:
       linear-gradient(180deg,rgba(10,31,51,.82) 0%,rgba(10,31,51,.93) 55%,var(--brand-navy-900) 100%),
-      url("/img/hero-home.png");
+      url("/img/hero-home.webp");
     background-position:72% center;
+  }
+}
+/* Phones get a 900px-wide encode — a 1672px image is wasted on a 375px screen
+   and costs real money on mobile data. */
+@media (max-width:640px){
+  .hero::before{
+    background-image:
+      linear-gradient(180deg,rgba(10,31,51,.82) 0%,rgba(10,31,51,.93) 55%,var(--brand-navy-900) 100%),
+      url("/img/hero-home-sm.webp");
   }
 }
 
@@ -352,6 +361,7 @@ body.has-mobile-cta{padding-bottom:56px}
   background-image:var(--band-img);
   background-size:cover;background-position:center;background-repeat:no-repeat;
 }
+@media (max-width:640px){.photo-band{background-image:var(--band-img-sm,var(--band-img))}}
 .hero .container{position:relative;padding-block:var(--s-10)}
 @media (min-width:1024px){.hero .container{padding-block:var(--s-12)}}
 .hero__grid{display:grid;gap:var(--s-9);align-items:center}
@@ -414,6 +424,13 @@ body.has-mobile-cta{padding-bottom:56px}
     background-image:
       linear-gradient(180deg,rgba(10,31,51,.88),rgba(10,31,51,.95)),
       var(--hero-img);
+  }
+}
+@media (max-width:640px){
+  .page-hero--photo::before{
+    background-image:
+      linear-gradient(180deg,rgba(10,31,51,.88),rgba(10,31,51,.95)),
+      var(--hero-img-sm,var(--hero-img));
   }
 }
 .page-hero .container{position:relative;padding-block:var(--s-9) var(--s-10)}
@@ -595,7 +612,7 @@ a.card:hover{border-color:var(--brand-green-700)}
 .field-row{display:grid;gap:var(--s-5)}
 @media (min-width:600px){.field-row{grid-template-columns:1fr 1fr;align-items:end}}
 .consent{display:flex;gap:var(--s-3);align-items:flex-start}
-.consent input{width:20px;height:20px;min-height:0;margin-top:3px;flex-shrink:0;accent-color:var(--brand-green-700)}
+.consent input{width:24px;height:24px;min-height:0;margin-top:1px;flex-shrink:0;accent-color:var(--brand-green-700)}
 .consent label{font-weight:400;font-size:var(--text-small);color:var(--neutral-600);line-height:1.55}
 .consent a{color:var(--brand-green-700)}
 .form-note{font-size:var(--text-small);color:var(--neutral-600)}
@@ -722,6 +739,34 @@ a.job:hover{border-color:var(--brand-green-700)}
 }
 
 /* --- 19. Print ----------------------------------------------------------- */
+/* --- Mobile touch targets -------------------------------------------------
+   Measured at 375px: footer list links were 15-17px tall, breadcrumbs 16px and
+   the founder buttons 21px. WCAG 2.5.5 asks for 44px. Applied on coarse
+   pointers only, so the desktop density is untouched. */
+@media (max-width:900px) and (pointer:coarse), (max-width:768px){
+  .site-footer ul li{margin-bottom:0}
+  .site-footer ul a,
+  .footer-grid a,
+  .legal ul a{
+    display:flex;align-items:center;min-height:44px;
+  }
+  .site-footer address{line-height:1.8}
+
+  .breadcrumb a,
+  .breadcrumb [aria-current]{display:inline-flex;align-items:center;min-height:36px}
+
+  .contact-card a{display:flex;align-items:center;min-height:44px;margin-top:0}
+  .contact-card__name{min-height:44px}
+
+  .card-links a,
+  .index-list a{min-height:44px}
+  .card .link,
+  .prose .link{display:inline-flex;align-items:center;min-height:44px}
+
+  .brand{display:flex;align-items:center;min-height:44px}
+  .utility a{display:inline-flex;align-items:center;min-height:40px}
+}
+
 @media print{
   .site-header,.utility,.mobile-cta,.mobile-nav,.cta-band,.site-footer{display:none!important}
   body{background:#fff;color:#000}
