@@ -142,11 +142,45 @@ live in one `@media (max-width:900px) and (pointer:coarse), (max-width:768px)`
 block so desktop density is untouched. Inline links inside sentences are left
 at text size, which the spec explicitly exempts.
 
+## Forms
+
+Both forms post to real handlers and the lead is emailed to `MAIL_TO`.
+
+| Form | Route | Handler |
+| --- | --- | --- |
+| Contact enquiry | `/contact` | `app/api/enquiry/route.ts` |
+| CV submission | `/careers/submit-cv` | `app/api/cv/route.ts` (attaches the file) |
+
+Configure via `.env.local` (see `.env.example`); on Vercel set the same keys
+under **Project Settings → Environment Variables**. `SMTP_HOST` is required —
+there is no default, so a missing value fails loudly rather than dropping leads.
+
+`replyTo` is set to the sender, so replying in the inbox goes to the lead.
+
+**Both submission paths work.** With JavaScript the form posts via `fetch` and
+shows the result in the existing `.form-status` line, keeping the person's
+answers if it fails. Without JavaScript the browser posts natively and the
+handler returns a 303 to `/thank-you` — the original progressive-enhancement
+design is preserved.
+
+Everything the client validated is re-checked server-side: honeypot
+(`company_website`), the 2.5s minimum fill time, consent, required fields,
+email format, field lengths, and for CVs the extension and size.
+
+**Upload cap is 4MB, not 5MB** — Vercel caps a serverless request body at
+4.5MB, so a 5MB CV would have failed with an opaque 413. The client-side limit
+and the copy were lowered to match.
+
+`app/api` is listed in `KEEP_DIRS` in the generator, which otherwise deletes
+every directory under `app/`. **Any new hand-written route must be added there**
+or `npm run generate` will destroy it.
+
 ## Not done yet
 
-Both forms (contact, CV upload) still carry `action="#"` from the preview build,
-so `public/site.js` falls into its preview branch and fakes a success message.
-They need real route handlers — `app/api/enquiry/route.ts` and
-`app/api/cv/route.ts` — plus `redirect('/thank-you')`. The honeypot field
-(`company_website`) and the 2.5s timing check are already wired in the client
-and should be re-checked server-side.
+Job pages emit no `JobPosting` schema until real posting dates are added (see
+the SEO section). The two founder headshots are still base64 JPEGs inlined in
+the source, worth ~86KB on `/about/leadership`.
+
+There is no rate limiting on the form endpoints. The honeypot and timing check
+stop naive bots, but a determined sender could still flood the inbox — worth
+adding a per-IP limit or a CAPTCHA if that becomes a problem.

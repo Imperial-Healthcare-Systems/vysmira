@@ -225,8 +225,8 @@
       var file = input.files[0];
       var ok = /\.(pdf|docx?|DOCX?|PDF)$/.test(file.name);
       if (!ok) { fieldError(input, 'Upload a PDF, DOC or DOCX file'); return false; }
-      if (file.size > 5 * 1024 * 1024) {
-        fieldError(input, 'This file is larger than 5MB. Please upload a smaller file.'); return false;
+      if (file.size > 4 * 1024 * 1024) {
+        fieldError(input, 'This file is larger than 4MB. Please upload a smaller file.'); return false;
       }
     }
     fieldError(input, '');
@@ -271,24 +271,59 @@
         var stamp = form.querySelector('[name="form_started"]');
         if (stamp) stamp.value = form.getAttribute('data-started') || '';
 
-        // Preview mode: opened from file://, or no endpoint configured yet.
-        // On a real deployment the form posts normally to its PHP handler.
+        // Opened straight from disk, or no endpoint wired yet: validate only.
         var isPreview = location.protocol === 'file:' || !form.getAttribute('action') ||
                         form.getAttribute('action') === '#';
+
+        var btn = form.querySelector('button[type="submit"]');
+        var status = form.querySelector('.form-status');
+        var label = btn ? (btn.getAttribute('data-label') || btn.textContent) : '';
+
+        function show(kind, msg) {
+          if (!status) return;
+          status.className = 'form-status form-status--' + kind + ' is-visible';
+          status.textContent = msg;
+          status.setAttribute('role', 'status');
+        }
+        function busy(on) {
+          if (!btn) return;
+          btn.disabled = on;
+          btn.textContent = on ? 'Sending…' : label;
+        }
+
         if (isPreview) {
           e.preventDefault();
-          var btn = form.querySelector('button[type="submit"]');
-          var status = form.querySelector('.form-status');
-          if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+          busy(true);
           setTimeout(function () {
-            if (status) {
-              status.className = 'form-status form-status--ok is-visible';
-              status.textContent = 'Validation passed. This is the preview build — on the deployed site this posts to the PHP handler in /api/ and redirects to the thank-you page.';
-              status.setAttribute('role', 'status');
-            }
-            if (btn) { btn.disabled = false; btn.textContent = btn.getAttribute('data-label') || 'Send enquiry'; }
+            show('ok', 'Validation passed. This is the preview build — on the deployed site this posts to /api/ and redirects to the thank-you page.');
+            busy(false);
           }, 700);
+          return;
         }
+
+        // Submit in place so the person keeps their answers if something fails.
+        // Without JS the form posts natively and the server redirects instead.
+        if (!window.fetch || !window.FormData) return;
+        e.preventDefault();
+        busy(true);
+        fetch(form.getAttribute('action'), {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' }
+        })
+          .then(function (res) { return res.json().catch(function () { return { ok: res.ok }; }); })
+          .then(function (data) {
+            if (data && data.ok) {
+              window.location.href = (data.redirect || '/thank-you');
+              return;
+            }
+            show('error', (data && data.error) || 'Something went wrong. Please try again.');
+            busy(false);
+          })
+          .catch(function () {
+            show('error', 'Network error — please check your connection and try again.');
+            busy(false);
+          });
       });
 
       form.setAttribute('data-started', String(Date.now()));

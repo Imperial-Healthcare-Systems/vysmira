@@ -281,8 +281,12 @@ function decodeEntities(s) {
 }
 
 // Wipe previously generated routes so deletions in the source propagate.
+// Hand-written directories must be listed here or they will be destroyed.
+const KEEP_DIRS = new Set(['api']);
 for (const entry of fs.readdirSync(APP, { withFileTypes: true })) {
-  if (entry.isDirectory()) fs.rmSync(path.join(APP, entry.name), { recursive: true, force: true });
+  if (entry.isDirectory() && !KEEP_DIRS.has(entry.name)) {
+    fs.rmSync(path.join(APP, entry.name), { recursive: true, force: true });
+  }
 }
 
 const SITE_DESCRIPTION =
