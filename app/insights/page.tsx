@@ -2,10 +2,51 @@
 import type { Metadata } from 'next';
 import PageBody from '@/components/PageBody';
 
-export const metadata: Metadata = { title: "Insights | Talent Market Analysis & Hiring Commentary | VYSMIRA Solutions" };
+export const metadata: Metadata = {
+  "title": "Insights | Talent Market Analysis & Hiring Commentary | VYSMIRA Solutions",
+  "description": "Observations from inside specialist hiring — compensation movement, skills availability, and what's actually happening in the sectors we work in.",
+  "alternates": {
+    "canonical": "/insights"
+  },
+  "openGraph": {
+    "title": "Insights | Talent Market Analysis & Hiring Commentary | VYSMIRA Solutions",
+    "description": "Observations from inside specialist hiring — compensation movement, skills availability, and what's actually happening in the sectors we work in.",
+    "url": "/insights",
+    "siteName": "VYSMIRA Solutions",
+    "locale": "en_IN",
+    "type": "website",
+    "images": [
+      {
+        "url": "/img/og-default.png",
+        "width": 1200,
+        "height": 630,
+        "alt": "VYSMIRA Solutions"
+      }
+    ]
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "title": "Insights | Talent Market Analysis & Hiring Commentary | VYSMIRA Solutions",
+    "description": "Observations from inside specialist hiring — compensation movement, skills availability, and what's actually happening in the sectors we work in.",
+    "images": [
+      "/img/og-default.png"
+    ]
+  }
+};
 
-const html = "<section class=\"page-hero\">\n<div class=\"container\">\n  <nav class=\"breadcrumb\" aria-label=\"Breadcrumb\"><ol><li><a href=\"/\">Home</a></li><li class=\"sep\" aria-hidden=\"true\">/</li><li aria-current=\"page\">Insights</li></ol></nav>\n  <p class=\"eyebrow\">Insights</p>\n  <h1>What we're seeing in the talent market.</h1>\n  <p class=\"lede\">Observations from inside specialist hiring — compensation movement, skills availability, and what's actually happening in the sectors we work in.</p>\n</div>\n</section>\n<section class=\"section\">\n<div class=\"container\">\n  <p class=\"eyebrow\">Published</p>\n  <h2>Written by our founders, when we have something worth saying.</h2>\n  <div class=\"grid grid--3\" style=\"margin-top:var(--s-7)\"><a class=\"card reveal\" href=\"/insights/why-your-niche-engineering-role-has-been-open-six-months\">\n  <div class=\"card__num\">HIRING STRATEGY</div>\n  <h3>Why your niche engineering role has been open for six months</h3>\n  <p>Four diagnoses, in the order we usually find them. Only one of them is a sourcing problem.</p>\n  <span class=\"link\">Read <svg class=\"arw\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" aria-hidden=\"true\"><path d=\"M3 8h9M8.5 4l4 4-4 4\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span>\n</a></div>\n</div>\n</section>\n\n<section class=\"section section--alt\">\n<div class=\"container\">\n  <p class=\"eyebrow\">In preparation</p>\n  <h2>Next up.</h2>\n  <div class=\"grid grid--2\" style=\"margin-top:var(--s-7)\"><div class=\"card reveal\"><div class=\"card__num\">SEMICONDUCTOR</div><h3>What a semiconductor design engineer actually costs in Bengaluru right now</h3><p>Compensation bands by role and experience level. Needs VYSMIRA's own offer data before publication.</p><span class=\"link muted\">In preparation</span></div><div class=\"card reveal\"><div class=\"card__num\">GCC</div><h3>The first fifteen hires: why GCC build-outs succeed or fail in the first quarter</h3><p>Why the leadership layer determines hiring velocity for everything that follows.</p><span class=\"link muted\">In preparation</span></div></div>\n</div>\n</section>\n<section class=\"cta-band\">\n<div class=\"container\">\n  <div class=\"split\">\n    <div class=\"reveal\">\n      <h2>Let's talk about the team you're building.</h2>\n    </div>\n    <div class=\"reveal\" data-delay=\"80\">\n      <p>Tell us the role, the constraint and the timeline. We'll tell you honestly whether we're the right firm for it &mdash; and if we're not, we'll say so.</p>\n      <div class=\"btn-row\">\n        <a class=\"btn btn--primary\" href=\"/contact\">Start a conversation</a>\n        <a class=\"btn btn--secondary\" href=\"tel:+917760342202\">Call +91 77603 42202</a>\n      </div>\n    </div>\n  </div>\n</div>\n</section>";
+const html = "<section class=\"page-hero\">\r\n<div class=\"container\">\r\n  <nav class=\"breadcrumb\" aria-label=\"Breadcrumb\"><ol><li><a href=\"/\">Home</a></li><li class=\"sep\" aria-hidden=\"true\">/</li><li aria-current=\"page\">Insights</li></ol></nav>\r\n  <p class=\"eyebrow\">Insights</p>\r\n  <h1>What we're seeing in the talent market.</h1>\r\n  <p class=\"lede\">Observations from inside specialist hiring — compensation movement, skills availability, and what's actually happening in the sectors we work in.</p>\r\n</div>\r\n</section>\r\n<section class=\"section\">\r\n<div class=\"container\">\r\n  <p class=\"eyebrow\">Published</p>\r\n  <h2>Written by our founders, when we have something worth saying.</h2>\r\n  <div class=\"grid grid--3\" style=\"margin-top:var(--s-7)\"><a class=\"card reveal\" href=\"/insights/why-your-niche-engineering-role-has-been-open-six-months\">\r\n  <div class=\"card__num\">HIRING STRATEGY</div>\r\n  <h3>Why your niche engineering role has been open for six months</h3>\r\n  <p>Four diagnoses, in the order we usually find them. Only one of them is a sourcing problem.</p>\r\n  <span class=\"link\">Read <svg class=\"arw\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" aria-hidden=\"true\"><path d=\"M3 8h9M8.5 4l4 4-4 4\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span>\r\n</a></div>\r\n</div>\r\n</section>\r\n\r\n<section class=\"section section--alt\">\r\n<div class=\"container\">\r\n  <p class=\"eyebrow\">In preparation</p>\r\n  <h2>Next up.</h2>\r\n  <div class=\"grid grid--2\" style=\"margin-top:var(--s-7)\"><div class=\"card reveal\"><div class=\"card__num\">SEMICONDUCTOR</div><h3>What a semiconductor design engineer actually costs in Bengaluru right now</h3><p>Compensation bands by role and experience level. Needs VYSMIRA's own offer data before publication.</p><span class=\"link muted\">In preparation</span></div><div class=\"card reveal\"><div class=\"card__num\">GCC</div><h3>The first fifteen hires: why GCC build-outs succeed or fail in the first quarter</h3><p>Why the leadership layer determines hiring velocity for everything that follows.</p><span class=\"link muted\">In preparation</span></div></div>\r\n</div>\r\n</section>\r\n<section class=\"cta-band\">\r\n<div class=\"container\">\r\n  <div class=\"split\">\r\n    <div class=\"reveal\">\r\n      <h2>Let's talk about the team you're building.</h2>\r\n    </div>\r\n    <div class=\"reveal\" data-delay=\"80\">\r\n      <p>Tell us the role, the constraint and the timeline. We'll tell you honestly whether we're the right firm for it &mdash; and if we're not, we'll say so.</p>\r\n      <div class=\"btn-row\">\r\n        <a class=\"btn btn--primary\" href=\"/contact\">Start a conversation</a>\r\n        <a class=\"btn btn--secondary\" href=\"tel:+917760342202\">Call +91 77603 42202</a>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n</section>";
+
+const jsonLd = [
+  "{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://www.vysmirasolutions.com\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Insights\",\"item\":\"https://www.vysmirasolutions.com/insights\"}]}"
+];
 
 export default function Page() {
-  return <PageBody nav="insights" html={html} />;
+  return (
+    <>
+      {jsonLd.map((block, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: block }} />
+      ))}
+      <PageBody nav="insights" html={html} />
+    </>
+  );
 }

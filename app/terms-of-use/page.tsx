@@ -2,10 +2,51 @@
 import type { Metadata } from 'next';
 import PageBody from '@/components/PageBody';
 
-export const metadata: Metadata = { title: "Terms of Use | VYSMIRA Solutions" };
+export const metadata: Metadata = {
+  "title": "Terms of Use | VYSMIRA Solutions",
+  "description": "The terms on which this website is made available.",
+  "alternates": {
+    "canonical": "/terms-of-use"
+  },
+  "openGraph": {
+    "title": "Terms of Use | VYSMIRA Solutions",
+    "description": "The terms on which this website is made available.",
+    "url": "/terms-of-use",
+    "siteName": "VYSMIRA Solutions",
+    "locale": "en_IN",
+    "type": "website",
+    "images": [
+      {
+        "url": "/img/og-default.png",
+        "width": 1200,
+        "height": 630,
+        "alt": "VYSMIRA Solutions"
+      }
+    ]
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "title": "Terms of Use | VYSMIRA Solutions",
+    "description": "The terms on which this website is made available.",
+    "images": [
+      "/img/og-default.png"
+    ]
+  }
+};
 
-const html = "<section class=\"page-hero\">\n<div class=\"container\">\n  <nav class=\"breadcrumb\" aria-label=\"Breadcrumb\"><ol><li><a href=\"/\">Home</a></li><li class=\"sep\" aria-hidden=\"true\">/</li><li aria-current=\"page\">Terms of Use</li></ol></nav>\n  <p class=\"eyebrow\">Legal</p>\n  <h1>Terms of Use</h1>\n  <p class=\"lede\">The terms on which this website is made available.</p>\n</div>\n</section>\n<section class=\"section\">\n<div class=\"container\">\n  <div class=\"split split--narrow-first\">\n    <div class=\"reveal\"><p class=\"eyebrow\">Last updated</p><p class=\"muted\">This document is pending legal review.</p></div>\n    <div class=\"prose reveal\" data-delay=\"60\"><div class=\"note\" style=\"margin-bottom:var(--s-7)\"><strong>Template for legal review.</strong> This page sets out the required scope per Document 1, Section 12.3. Final wording must be reviewed and approved by the client's legal adviser before launch.</div><h3>Scope</h3><p>These terms govern your use of www.vysmirasolutions.com. By using the site you accept them.</p><h3>Intellectual property</h3><p>All content on this site, including text, design, graphics and the VYSMIRA marks, is owned by VYSMIRA Solutions unless otherwise stated. You may view and print pages for your own reference. You may not reproduce or republish content without written permission.</p><h3>No guarantee of outcome</h3><p>Nothing on this site constitutes a guarantee of employment, placement, or any particular hiring outcome. Job listings are indicative and may be withdrawn or filled at any time.</p><h3>Accuracy</h3><p>We take care to keep this site accurate and current, but we do not warrant that it is free from error or omission.</p><h3>Third-party links</h3><p>Where we link to external sites, we are not responsible for their content or their privacy practices.</p><h3>Limitation of liability</h3><p>To the extent permitted by law, VYSMIRA Solutions is not liable for any loss arising from your use of, or inability to use, this website.</p><h3>Governing law</h3><p>These terms are governed by the laws of India, and the courts at Bengaluru have exclusive jurisdiction.</p></div>\n  </div>\n</div>\n</section>";
+const html = "<section class=\"page-hero\">\r\n<div class=\"container\">\r\n  <nav class=\"breadcrumb\" aria-label=\"Breadcrumb\"><ol><li><a href=\"/\">Home</a></li><li class=\"sep\" aria-hidden=\"true\">/</li><li aria-current=\"page\">Terms of Use</li></ol></nav>\r\n  <p class=\"eyebrow\">Legal</p>\r\n  <h1>Terms of Use</h1>\r\n  <p class=\"lede\">The terms on which this website is made available.</p>\r\n</div>\r\n</section>\r\n<section class=\"section\">\r\n<div class=\"container\">\r\n  <div class=\"split split--narrow-first\">\r\n    <div class=\"reveal\"><p class=\"eyebrow\">Last updated</p><p class=\"muted\">This document is pending legal review.</p></div>\r\n    <div class=\"prose reveal\" data-delay=\"60\"><div class=\"note\" style=\"margin-bottom:var(--s-7)\"><strong>Template for legal review.</strong> This page sets out the required scope per Document 1, Section 12.3. Final wording must be reviewed and approved by the client's legal adviser before launch.</div><h3>Scope</h3><p>These terms govern your use of www.vysmirasolutions.com. By using the site you accept them.</p><h3>Intellectual property</h3><p>All content on this site, including text, design, graphics and the VYSMIRA marks, is owned by VYSMIRA Solutions unless otherwise stated. You may view and print pages for your own reference. You may not reproduce or republish content without written permission.</p><h3>No guarantee of outcome</h3><p>Nothing on this site constitutes a guarantee of employment, placement, or any particular hiring outcome. Job listings are indicative and may be withdrawn or filled at any time.</p><h3>Accuracy</h3><p>We take care to keep this site accurate and current, but we do not warrant that it is free from error or omission.</p><h3>Third-party links</h3><p>Where we link to external sites, we are not responsible for their content or their privacy practices.</p><h3>Limitation of liability</h3><p>To the extent permitted by law, VYSMIRA Solutions is not liable for any loss arising from your use of, or inability to use, this website.</p><h3>Governing law</h3><p>These terms are governed by the laws of India, and the courts at Bengaluru have exclusive jurisdiction.</p></div>\r\n  </div>\r\n</div>\r\n</section>";
+
+const jsonLd = [
+  "{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://www.vysmirasolutions.com\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Terms of Use\",\"item\":\"https://www.vysmirasolutions.com/terms-of-use\"}]}"
+];
 
 export default function Page() {
-  return <PageBody nav="legal" html={html} />;
+  return (
+    <>
+      {jsonLd.map((block, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: block }} />
+      ))}
+      <PageBody nav="legal" html={html} />
+    </>
+  );
 }

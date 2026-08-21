@@ -37,6 +37,7 @@ const absolutiseUrls = (s) => s.replace(/url\((["']?)(?!\/|https?:|data:)/g, 'ur
 
 const rewrite = (html) =>
   absolutiseUrls(externalise(html))
+    .replace(/(?<![\w-])(src|srcset|poster)="(?!\/|https?:|data:|#)/g, '$1="/')
     .replace(/href="#\/"/g, 'href="/"')
     .replace(/href="#\/([^"]*)"/g, 'href="/$1"');
 
@@ -125,7 +126,7 @@ const ldjson = /<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(
 fs.writeFileSync(path.join(CMP, 'ldjson.ts'), `export const ldJson = ${JSON.stringify(ldjson)};\n`);
 
 /* ---- 7. Views -> one route each ---------------------------------------- */
-const viewRe = /<div class="view" id="v-([^"]+)" data-nav="([^"]*)" data-title="([^"]*)"[^>]*>/g;
+const viewRe = /<div class="view" id="v-([^"]+)" data-nav="([^"]*)" data-title="([^"]*)"([^>]*)>/g;
 const mainEnd = src.indexOf('</main>');
 const views = [];
 let m;
@@ -134,6 +135,8 @@ while ((m = viewRe.exec(src))) {
     route: m[1],
     nav: m[2],
     title: decodeEntities(m[3]),
+    posted: (/data-posted="([^"]+)"/.exec(m[4]) || [])[1] || null,
+    validThrough: (/data-valid-through="([^"]+)"/.exec(m[4]) || [])[1] || null,
     tagStart: m.index,
     start: m.index + m[0].length,
   });
@@ -143,6 +146,120 @@ views.forEach((v, i) => {
   // Each view block closes with the wrapper </div> we are replacing with <PageBody>.
   v.html = rewrite(src.slice(v.start, end).trim().replace(/<\/div>$/, '').trim());
 });
+
+/* ---- 7a. SEO: descriptions and breadcrumbs derived from each view ------- */
+const SITE = 'https://www.vysmirasolutions.com';
+const OG_IMAGE = '/img/og-default.png';
+
+// Pages that exist for users mid-flow, not for search results.
+const NOINDEX = new Set(['thank-you', '404']);
+
+const stripTags = (html) =>
+  decodeEntities(
+    html
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+  );
+
+// Google renders roughly 155 characters; cut on a word boundary, never mid-word.
+function truncate(text, limit = 155) {
+  if (text.length <= limit) return text;
+  const cut = text.slice(0, limit + 1);
+  const lastSpace = cut.lastIndexOf(' ');
+  return cut.slice(0, lastSpace > 60 ? lastSpace : limit).replace(/[,;:\s]+$/, '') + '…';
+}
+
+// The lede under each h1 is already a one-sentence summary of the page — far
+// better copy than anything generated, and it stays in sync with the content.
+function extractDescription(html, fallback) {
+  // Only look inside the opening hero/page-hero block. Interior sections also
+  // use .lede, and picking one of those would describe a mid-page section
+  // rather than the page itself.
+  const firstSection = html.slice(0, html.indexOf('</section>') + 1) || html;
+  const pick = (scope) =>
+    /class="lede"[^>]*>([\s\S]*?)<\/p>/.exec(scope) || /class="hero__sub"[^>]*>([\s\S]*?)<\/p>/.exec(scope);
+
+  const match = pick(firstSection) || pick(html);
+  const text = match ? stripTags(match[1]) : '';
+  return text ? truncate(text) : fallback;
+}
+
+// Each interior page already renders a visible breadcrumb; mirror it as
+// BreadcrumbList so the trail shows in search results too.
+function extractBreadcrumb(html, route) {
+  const nav = /<nav class="breadcrumb"[^>]*>([\s\S]*?)<\/nav>/.exec(html);
+  if (!nav) return null;
+
+  // Test the whole <li> tag, not its contents — the "/" separators carry
+  // class="sep" on the element itself.
+  const items = [...nav[1].matchAll(/<li[^>]*>[\s\S]*?<\/li>/g)]
+    .map((m) => m[0])
+    .filter((li) => !/class="sep"/.test(li));
+  if (items.length < 2) return null;
+
+  const crumbs = items.map((li) => {
+    // Hrefs are already rewritten to real paths by this point.
+    const href = /href="(\/[^"]*)"/.exec(li);
+    return { name: stripTags(li), path: href ? href[1] : null };
+  });
+  // The final crumb is the current page, which the markup renders unlinked.
+  crumbs[crumbs.length - 1].path = `/${route}`;
+
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.name,
+      item: SITE + (c.path === '/' ? '' : c.path ?? ''),
+    })),
+  });
+}
+
+// Google Jobs requires a real datePosted. Rather than invent one, each job view
+// must declare data-posted="YYYY-MM-DD" (optionally data-valid-through) in the
+// preview build; without it we emit no JobPosting rather than bad structured data.
+function extractJobPosting(html, route, title, description, posted, validThrough) {
+  if (!posted) return null;
+
+  const facts = {};
+  for (const m of html.matchAll(/<span class="mark">([^<]+)<\/span>([^<]*)</g)) {
+    facts[stripTags(m[1]).toUpperCase()] = stripTags(m[2]);
+  }
+  const location = facts.LOCATION || 'Bengaluru, Karnataka';
+  const [city, region] = location.split(',').map((x) => x.trim());
+
+  const EMPLOYMENT = { Permanent: 'FULL_TIME', Contract: 'CONTRACTOR', 'Full-time': 'FULL_TIME' };
+
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'JobPosting',
+    title,
+    description,
+    datePosted: posted,
+    ...(validThrough ? { validThrough } : {}),
+    employmentType: EMPLOYMENT[facts.TYPE] || 'FULL_TIME',
+    ...(facts.REFERENCE ? { identifier: { '@type': 'PropertyValue', name: 'VYSMIRA Solutions', value: facts.REFERENCE } } : {}),
+    hiringOrganization: {
+      '@type': 'Organization',
+      name: 'VYSMIRA Solutions',
+      sameAs: SITE,
+    },
+    jobLocation: {
+      '@type': 'Place',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: city || 'Bengaluru',
+        addressRegion: region || 'Karnataka',
+        addressCountry: 'IN',
+      },
+    },
+    directApply: false,
+    url: `${SITE}/${route}`,
+  });
+}
 
 function decodeEntities(s) {
   return s
@@ -161,25 +278,114 @@ for (const entry of fs.readdirSync(APP, { withFileTypes: true })) {
   if (entry.isDirectory()) fs.rmSync(path.join(APP, entry.name), { recursive: true, force: true });
 }
 
+const SITE_DESCRIPTION =
+  'Specialist recruitment and human capital consulting for semiconductor, embedded, automotive and engineering organisations in India.';
+
 let pages = 0;
+const indexable = [];
+const missingJobDates = [];
 for (const v of views) {
   const isHome = v.route === 'home';
   const is404 = v.route === '404';
   const dir = isHome || is404 ? APP : path.join(APP, ...v.route.split('/'));
   fs.mkdirSync(dir, { recursive: true });
 
+  const urlPath = isHome ? '/' : `/${v.route}`;
+  const description = extractDescription(v.html, SITE_DESCRIPTION);
+  const noindex = NOINDEX.has(v.route);
+  const breadcrumb = is404 ? null : extractBreadcrumb(v.html, v.route);
+
+  const isJob = v.route.startsWith('careers/jobs/') && v.route.split('/').length > 2;
+  const h1 = /<h1[^>]*>([\s\S]*?)<\/h1>/.exec(v.html);
+  const jobPosting = isJob
+    ? extractJobPosting(v.html, v.route, h1 ? stripTags(h1[1]) : v.title, description, v.posted, v.validThrough)
+    : null;
+  if (isJob && !jobPosting) missingJobDates.push(v.route);
+
+  const ld = [breadcrumb, jobPosting].filter(Boolean);
+
+  if (!noindex) indexable.push(urlPath);
+
+  const metadata = {
+    title: v.title,
+    description,
+    alternates: { canonical: urlPath },
+    openGraph: {
+      title: v.title,
+      description,
+      url: urlPath,
+      siteName: 'VYSMIRA Solutions',
+      locale: 'en_IN',
+      type: isJob || v.route.startsWith('insights/') ? 'article' : 'website',
+      images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: 'VYSMIRA Solutions' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: v.title,
+      description,
+      images: [OG_IMAGE],
+    },
+    ...(noindex ? { robots: { index: false, follow: true } } : {}),
+  };
+
   const body =
     '/* GENERATED by scripts/generate.mjs — do not edit by hand. */\n' +
     (is404 ? '' : "import type { Metadata } from 'next';\n") +
     "import PageBody from '@/components/PageBody';\n\n" +
-    (is404 ? '' : `export const metadata: Metadata = { title: ${JSON.stringify(v.title)} };\n\n`) +
+    (is404 ? '' : `export const metadata: Metadata = ${JSON.stringify(metadata, null, 2)};\n\n`) +
     `const html = ${JSON.stringify(v.html)};\n\n` +
+    (ld.length ? `const jsonLd = ${JSON.stringify(ld, null, 2)};\n\n` : '') +
     `export default function ${is404 ? 'NotFound' : 'Page'}() {\n` +
-    `  return <PageBody nav=${JSON.stringify(v.nav)} html={html} />;\n` +
+    (ld.length
+      ? '  return (\n' +
+        '    <>\n' +
+        '      {jsonLd.map((block, i) => (\n' +
+        '        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: block }} />\n' +
+        '      ))}\n' +
+        `      <PageBody nav=${JSON.stringify(v.nav)} html={html} />\n` +
+        '    </>\n' +
+        '  );\n'
+      : `  return <PageBody nav=${JSON.stringify(v.nav)} html={html} />;\n`) +
     '}\n';
 
   fs.writeFileSync(path.join(dir, is404 ? 'not-found.tsx' : 'page.tsx'), body);
   pages++;
+}
+
+/* ---- 8. sitemap.xml and robots.txt ------------------------------------- */
+fs.writeFileSync(
+  path.join(APP, 'sitemap.ts'),
+  '/* GENERATED by scripts/generate.mjs — do not edit by hand. */\n' +
+    "import type { MetadataRoute } from 'next';\n\n" +
+    `const ROUTES = ${JSON.stringify(indexable, null, 2)};\n\n` +
+    'export default function sitemap(): MetadataRoute.Sitemap {\n' +
+    '  const lastModified = new Date();\n' +
+    '  return ROUTES.map((route) => ({\n' +
+    `    url: \`${SITE}\${route === '/' ? '' : route}\`,\n` +
+    '    lastModified,\n' +
+    "    changeFrequency: route.startsWith('/careers/jobs/') ? 'weekly' : 'monthly',\n" +
+    "    priority: route === '/' ? 1 : route.split('/').length > 2 ? 0.6 : 0.8,\n" +
+    '  }));\n' +
+    '}\n'
+);
+
+fs.writeFileSync(
+  path.join(APP, 'robots.ts'),
+  '/* GENERATED by scripts/generate.mjs — do not edit by hand. */\n' +
+    "import type { MetadataRoute } from 'next';\n\n" +
+    'export default function robots(): MetadataRoute.Robots {\n' +
+    '  return {\n' +
+    "    rules: { userAgent: '*', allow: '/', disallow: ['/thank-you'] },\n" +
+    `    sitemap: '${SITE}/sitemap.xml',\n` +
+    `    host: '${SITE}',\n` +
+    '  };\n' +
+    '}\n'
+);
+
+if (missingJobDates.length) {
+  console.warn('  ! no JobPosting emitted for ' + missingJobDates.length + ' job page(s).');
+  console.warn('    Add data-posted="YYYY-MM-DD" to these views in vysmira-preview.html:');
+  for (const r of missingJobDates) console.warn('      ' + r);
 }
 
 console.log(

@@ -74,6 +74,35 @@ every directory under `app/` first, so route removals propagate. Hand-written
 files: `app/layout.tsx`, `components/PageBody.tsx`, `components/NavEnhancer.tsx`,
 `scripts/generate.mjs`.
 
+## SEO
+
+All of it is derived from the preview build, so it stays in sync with the copy:
+
+| Signal | Source |
+| --- | --- |
+| `<title>` | each view's `data-title` |
+| `<meta description>` | the `.lede` / `.hero__sub` **inside that page's hero block** (interior sections also use `.lede`; taking one of those would describe a section, not the page) |
+| `<link rel=canonical>` | the route |
+| Open Graph + Twitter card | title/description above, `/img/og-default.png` (1200×630) |
+| `BreadcrumbList` JSON-LD | parsed from the page's own visible breadcrumb |
+| `ProfessionalService` JSON-LD | the block in the preview `<head>`, emitted site-wide via `layout.tsx` |
+| `sitemap.xml` | `app/sitemap.ts`, regenerated from the indexable route list |
+| `robots.txt` | `app/robots.ts` |
+
+`/thank-you` and the 404 are `noindex, follow` and excluded from the sitemap.
+
+**JobPosting** is implemented but dormant. Google requires a real `datePosted`,
+which the markup doesn't carry, so the generator refuses to invent one — it
+prints a warning naming each job page instead. Add to the view tag in
+`vysmira-preview.html` and it starts emitting:
+
+```html
+<div class="view" id="v-careers/jobs/…" … data-posted="2026-08-01" data-valid-through="2026-10-01">
+```
+
+Location, employment type and reference number are already parsed from each
+job's `.cred-strip`.
+
 ## Not done yet
 
 Both forms (contact, CV upload) still carry `action="#"` from the preview build,

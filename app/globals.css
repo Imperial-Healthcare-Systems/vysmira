@@ -432,6 +432,41 @@ body.has-mobile-cta{padding-bottom:56px}
 .cred-strip li{margin:0;display:flex;align-items:center;gap:var(--s-3);font-size:var(--text-small)}
 .cred-strip .mark{color:var(--brand-gold-500);font-family:var(--font-mono);font-size:var(--text-label);flex-shrink:0}
 
+/* Clientele. Monogram tiles stand in until real logos are supplied — swap
+   .client__mark for an <img> and the layout is unchanged. */
+.client-list{display:grid;gap:var(--s-5);list-style:none;margin:var(--s-7) 0 0;padding:0}
+@media (min-width:768px){.client-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1024px){.client-list{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.client-list li{margin:0}
+.client{
+  display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-5);height:100%;
+  background:var(--neutral-0);border:1px solid var(--neutral-200);
+  border-radius:var(--radius-md);padding:var(--s-6);
+  transition:border-color .18s var(--ease-std),box-shadow .18s var(--ease-std);
+}
+.client:hover{border-color:var(--brand-green-700);box-shadow:var(--shadow-1)}
+.client__mark{
+  flex:none;width:72px;height:72px;display:grid;place-items:center;
+  background:var(--brand-navy-900);color:var(--brand-gold-500);
+  border-radius:var(--radius-sm);
+  font-family:var(--font-mono);font-size:var(--text-small);letter-spacing:.04em;
+}
+.client__name{
+  font-family:var(--font-display);font-weight:600;font-size:var(--text-h4);
+  letter-spacing:-.006em;color:var(--brand-navy-900);line-height:1.2;
+}
+/* Client logo slot. A fixed box both a square badge and a wide wordmark are
+   contained within, so logos of different proportions still line up card to
+   card. Falls back to .client__mark (a monogram) where no logo exists yet. */
+.client__logo{flex:none;display:grid;place-items:center;width:160px;height:72px;overflow:hidden}
+.client__logo img{display:block;width:auto;height:auto;max-width:160px;max-height:72px;object-fit:contain}
+@media (max-width:480px){.client__mark{width:52px;height:52px}}
+@media (max-width:480px){
+  .client{gap:var(--s-4)}
+  .client__logo{width:112px;height:52px}
+  .client__logo img{max-width:112px;max-height:52px}
+}
+
 /* --- 10. Cards ----------------------------------------------------------- */
 .card{
   display:flex;flex-direction:column;background:var(--neutral-0);

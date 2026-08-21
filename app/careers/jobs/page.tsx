@@ -2,10 +2,51 @@
 import type { Metadata } from 'next';
 import PageBody from '@/components/PageBody';
 
-export const metadata: Metadata = { title: "Open Roles | Engineering & Leadership Jobs India | VYSMIRA Solutions" };
+export const metadata: Metadata = {
+  "title": "Open Roles | Engineering & Leadership Jobs India | VYSMIRA Solutions",
+  "description": "Current mandates. If nothing here fits, submit your CV — most of our roles are filled before they're advertised.",
+  "alternates": {
+    "canonical": "/careers/jobs"
+  },
+  "openGraph": {
+    "title": "Open Roles | Engineering & Leadership Jobs India | VYSMIRA Solutions",
+    "description": "Current mandates. If nothing here fits, submit your CV — most of our roles are filled before they're advertised.",
+    "url": "/careers/jobs",
+    "siteName": "VYSMIRA Solutions",
+    "locale": "en_IN",
+    "type": "website",
+    "images": [
+      {
+        "url": "/img/og-default.png",
+        "width": 1200,
+        "height": 630,
+        "alt": "VYSMIRA Solutions"
+      }
+    ]
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "title": "Open Roles | Engineering & Leadership Jobs India | VYSMIRA Solutions",
+    "description": "Current mandates. If nothing here fits, submit your CV — most of our roles are filled before they're advertised.",
+    "images": [
+      "/img/og-default.png"
+    ]
+  }
+};
 
-const html = "<section class=\"page-hero\">\n<div class=\"container\">\n  <nav class=\"breadcrumb\" aria-label=\"Breadcrumb\"><ol><li><a href=\"/\">Home</a></li><li class=\"sep\" aria-hidden=\"true\">/</li><li><a href=\"/careers\">Careers</a></li><li class=\"sep\" aria-hidden=\"true\">/</li><li aria-current=\"page\">Open roles</li></ol></nav>\n  <p class=\"eyebrow\">For candidates</p>\n  <h1>Open roles.</h1>\n  <p class=\"lede\">Current mandates. If nothing here fits, submit your CV — most of our roles are filled before they're advertised.</p>\n</div>\n</section>\n<section class=\"section\">\n<div class=\"container\">\n  <p class=\"eyebrow\">3 roles currently listed</p>\n  <h2>Every role here is live.</h2>\n  <p class=\"lede\" style=\"margin-top:var(--s-4)\">We don't post roles to build a database. If it's on this page, we're actively working it.</p>\n  <div class=\"grid grid--2\" style=\"margin-top:var(--s-7)\"><a class=\"job reveal\" href=\"/careers/jobs/senior-design-verification-engineer-bengaluru\">\n  <div class=\"job__meta\"><span>Semiconductor &amp; VLSI</span><span>Bengaluru, Karnataka</span><span>Permanent</span></div>\n  <h3>Senior Design Verification Engineer</h3>\n  <div class=\"job__meta\"><span>6–10 years experience</span><span>Ref VYS-SEM-041</span></div>\n</a><a class=\"job reveal\" href=\"/careers/jobs/engineering-manager-adas-pune\">\n  <div class=\"job__meta\"><span>Automotive &amp; Mobility</span><span>Pune, Maharashtra</span><span>Permanent</span></div>\n  <h3>Engineering Manager — ADAS Software</h3>\n  <div class=\"job__meta\"><span>12–16 years experience</span><span>Ref VYS-AUT-018</span></div>\n</a><a class=\"job reveal\" href=\"/careers/jobs/site-hr-head-gcc-bengaluru\">\n  <div class=\"job__meta\"><span>Global Capability Centres</span><span>Bengaluru, Karnataka</span><span>Permanent</span></div>\n  <h3>HR Head — India Capability Centre</h3>\n  <div class=\"job__meta\"><span>14+ years experience</span><span>Ref VYS-GCC-007</span></div>\n</a></div>\n  <div class=\"note\" style=\"margin-top:var(--s-8)\">\n    <strong>Not seeing your discipline?</strong> Most of what we work on is never advertised. <a href=\"/careers/submit-cv\">Send us your CV</a> and we'll come to you when something fits.\n  </div>\n</div>\n</section>\n<section class=\"cta-band\">\n<div class=\"container\">\n  <div class=\"split\">\n    <div class=\"reveal\">\n      <h2>Let's talk about the team you're building.</h2>\n    </div>\n    <div class=\"reveal\" data-delay=\"80\">\n      <p>Tell us the role, the constraint and the timeline. We'll tell you honestly whether we're the right firm for it &mdash; and if we're not, we'll say so.</p>\n      <div class=\"btn-row\">\n        <a class=\"btn btn--primary\" href=\"/contact\">Start a conversation</a>\n        <a class=\"btn btn--secondary\" href=\"tel:+917760342202\">Call +91 77603 42202</a>\n      </div>\n    </div>\n  </div>\n</div>\n</section>";
+const html = "<section class=\"page-hero\">\r\n<div class=\"container\">\r\n  <nav class=\"breadcrumb\" aria-label=\"Breadcrumb\"><ol><li><a href=\"/\">Home</a></li><li class=\"sep\" aria-hidden=\"true\">/</li><li><a href=\"/careers\">Careers</a></li><li class=\"sep\" aria-hidden=\"true\">/</li><li aria-current=\"page\">Open roles</li></ol></nav>\r\n  <p class=\"eyebrow\">For candidates</p>\r\n  <h1>Open roles.</h1>\r\n  <p class=\"lede\">Current mandates. If nothing here fits, submit your CV — most of our roles are filled before they're advertised.</p>\r\n</div>\r\n</section>\r\n<section class=\"section\">\r\n<div class=\"container\">\r\n  <p class=\"eyebrow\">3 roles currently listed</p>\r\n  <h2>Every role here is live.</h2>\r\n  <p class=\"lede\" style=\"margin-top:var(--s-4)\">We don't post roles to build a database. If it's on this page, we're actively working it.</p>\r\n  <div class=\"grid grid--2\" style=\"margin-top:var(--s-7)\"><a class=\"job reveal\" href=\"/careers/jobs/senior-design-verification-engineer-bengaluru\">\r\n  <div class=\"job__meta\"><span>Semiconductor &amp; VLSI</span><span>Bengaluru, Karnataka</span><span>Permanent</span></div>\r\n  <h3>Senior Design Verification Engineer</h3>\r\n  <div class=\"job__meta\"><span>6–10 years experience</span><span>Ref VYS-SEM-041</span></div>\r\n</a><a class=\"job reveal\" href=\"/careers/jobs/engineering-manager-adas-pune\">\r\n  <div class=\"job__meta\"><span>Automotive &amp; Mobility</span><span>Pune, Maharashtra</span><span>Permanent</span></div>\r\n  <h3>Engineering Manager — ADAS Software</h3>\r\n  <div class=\"job__meta\"><span>12–16 years experience</span><span>Ref VYS-AUT-018</span></div>\r\n</a><a class=\"job reveal\" href=\"/careers/jobs/site-hr-head-gcc-bengaluru\">\r\n  <div class=\"job__meta\"><span>Global Capability Centres</span><span>Bengaluru, Karnataka</span><span>Permanent</span></div>\r\n  <h3>HR Head — India Capability Centre</h3>\r\n  <div class=\"job__meta\"><span>14+ years experience</span><span>Ref VYS-GCC-007</span></div>\r\n</a></div>\r\n  <div class=\"note\" style=\"margin-top:var(--s-8)\">\r\n    <strong>Not seeing your discipline?</strong> Most of what we work on is never advertised. <a href=\"/careers/submit-cv\">Send us your CV</a> and we'll come to you when something fits.\r\n  </div>\r\n</div>\r\n</section>\r\n<section class=\"cta-band\">\r\n<div class=\"container\">\r\n  <div class=\"split\">\r\n    <div class=\"reveal\">\r\n      <h2>Let's talk about the team you're building.</h2>\r\n    </div>\r\n    <div class=\"reveal\" data-delay=\"80\">\r\n      <p>Tell us the role, the constraint and the timeline. We'll tell you honestly whether we're the right firm for it &mdash; and if we're not, we'll say so.</p>\r\n      <div class=\"btn-row\">\r\n        <a class=\"btn btn--primary\" href=\"/contact\">Start a conversation</a>\r\n        <a class=\"btn btn--secondary\" href=\"tel:+917760342202\">Call +91 77603 42202</a>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n</section>";
+
+const jsonLd = [
+  "{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://www.vysmirasolutions.com\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Careers\",\"item\":\"https://www.vysmirasolutions.com/careers\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Open roles\",\"item\":\"https://www.vysmirasolutions.com/careers/jobs\"}]}"
+];
 
 export default function Page() {
-  return <PageBody nav="careers" html={html} />;
+  return (
+    <>
+      {jsonLd.map((block, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: block }} />
+      ))}
+      <PageBody nav="careers" html={html} />
+    </>
+  );
 }

@@ -2,10 +2,51 @@
 import type { Metadata } from 'next';
 import PageBody from '@/components/PageBody';
 
-export const metadata: Metadata = { title: "Cookie Policy | VYSMIRA Solutions" };
+export const metadata: Metadata = {
+  "title": "Cookie Policy | VYSMIRA Solutions",
+  "description": "What cookies this site uses, and how to control them.",
+  "alternates": {
+    "canonical": "/cookie-policy"
+  },
+  "openGraph": {
+    "title": "Cookie Policy | VYSMIRA Solutions",
+    "description": "What cookies this site uses, and how to control them.",
+    "url": "/cookie-policy",
+    "siteName": "VYSMIRA Solutions",
+    "locale": "en_IN",
+    "type": "website",
+    "images": [
+      {
+        "url": "/img/og-default.png",
+        "width": 1200,
+        "height": 630,
+        "alt": "VYSMIRA Solutions"
+      }
+    ]
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "title": "Cookie Policy | VYSMIRA Solutions",
+    "description": "What cookies this site uses, and how to control them.",
+    "images": [
+      "/img/og-default.png"
+    ]
+  }
+};
 
-const html = "<section class=\"page-hero\">\n<div class=\"container\">\n  <nav class=\"breadcrumb\" aria-label=\"Breadcrumb\"><ol><li><a href=\"/\">Home</a></li><li class=\"sep\" aria-hidden=\"true\">/</li><li aria-current=\"page\">Cookie Policy</li></ol></nav>\n  <p class=\"eyebrow\">Legal</p>\n  <h1>Cookie Policy</h1>\n  <p class=\"lede\">What cookies this site uses, and how to control them.</p>\n</div>\n</section>\n<section class=\"section\">\n<div class=\"container\">\n  <div class=\"split split--narrow-first\">\n    <div class=\"reveal\"><p class=\"eyebrow\">Last updated</p><p class=\"muted\">This document is pending legal review.</p></div>\n    <div class=\"prose reveal\" data-delay=\"60\"><div class=\"note\" style=\"margin-bottom:var(--s-7)\"><strong>Template for legal review.</strong> This page sets out the required scope per Document 1, Section 12.3. Final wording must be reviewed and approved by the client's legal adviser before launch.</div><h3>What cookies we use</h3><p>Essential cookies required for the site to function, and analytics cookies that help us understand how the site is used.</p><h3>Essential cookies</h3><p>These support core functionality such as remembering your cookie preferences. They cannot be switched off.</p><h3>Analytics cookies</h3><p>We use analytics to understand which pages are useful and where visitors leave. These are set only with your consent.</p><h3>Managing cookies</h3><p>You can withdraw consent at any time through your browser settings, or by clearing cookies for this site. Blocking essential cookies may affect how the site works.</p><h3>Third-party cookies</h3><p>Analytics cookies are set by our analytics provider. No advertising or cross-site tracking cookies are used on this site.</p></div>\n  </div>\n</div>\n</section>";
+const html = "<section class=\"page-hero\">\r\n<div class=\"container\">\r\n  <nav class=\"breadcrumb\" aria-label=\"Breadcrumb\"><ol><li><a href=\"/\">Home</a></li><li class=\"sep\" aria-hidden=\"true\">/</li><li aria-current=\"page\">Cookie Policy</li></ol></nav>\r\n  <p class=\"eyebrow\">Legal</p>\r\n  <h1>Cookie Policy</h1>\r\n  <p class=\"lede\">What cookies this site uses, and how to control them.</p>\r\n</div>\r\n</section>\r\n<section class=\"section\">\r\n<div class=\"container\">\r\n  <div class=\"split split--narrow-first\">\r\n    <div class=\"reveal\"><p class=\"eyebrow\">Last updated</p><p class=\"muted\">This document is pending legal review.</p></div>\r\n    <div class=\"prose reveal\" data-delay=\"60\"><div class=\"note\" style=\"margin-bottom:var(--s-7)\"><strong>Template for legal review.</strong> This page sets out the required scope per Document 1, Section 12.3. Final wording must be reviewed and approved by the client's legal adviser before launch.</div><h3>What cookies we use</h3><p>Essential cookies required for the site to function, and analytics cookies that help us understand how the site is used.</p><h3>Essential cookies</h3><p>These support core functionality such as remembering your cookie preferences. They cannot be switched off.</p><h3>Analytics cookies</h3><p>We use analytics to understand which pages are useful and where visitors leave. These are set only with your consent.</p><h3>Managing cookies</h3><p>You can withdraw consent at any time through your browser settings, or by clearing cookies for this site. Blocking essential cookies may affect how the site works.</p><h3>Third-party cookies</h3><p>Analytics cookies are set by our analytics provider. No advertising or cross-site tracking cookies are used on this site.</p></div>\r\n  </div>\r\n</div>\r\n</section>";
+
+const jsonLd = [
+  "{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://www.vysmirasolutions.com\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Cookie Policy\",\"item\":\"https://www.vysmirasolutions.com/cookie-policy\"}]}"
+];
 
 export default function Page() {
-  return <PageBody nav="legal" html={html} />;
+  return (
+    <>
+      {jsonLd.map((block, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: block }} />
+      ))}
+      <PageBody nav="legal" html={html} />
+    </>
+  );
 }

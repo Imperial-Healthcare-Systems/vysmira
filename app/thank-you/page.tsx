@@ -2,10 +2,55 @@
 import type { Metadata } from 'next';
 import PageBody from '@/components/PageBody';
 
-export const metadata: Metadata = { title: "Thank you | VYSMIRA Solutions" };
+export const metadata: Metadata = {
+  "title": "Thank you | VYSMIRA Solutions",
+  "description": "One of our founders will respond personally within one business day. If your requirement is time-critical, call us directly.",
+  "alternates": {
+    "canonical": "/thank-you"
+  },
+  "openGraph": {
+    "title": "Thank you | VYSMIRA Solutions",
+    "description": "One of our founders will respond personally within one business day. If your requirement is time-critical, call us directly.",
+    "url": "/thank-you",
+    "siteName": "VYSMIRA Solutions",
+    "locale": "en_IN",
+    "type": "website",
+    "images": [
+      {
+        "url": "/img/og-default.png",
+        "width": 1200,
+        "height": 630,
+        "alt": "VYSMIRA Solutions"
+      }
+    ]
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "title": "Thank you | VYSMIRA Solutions",
+    "description": "One of our founders will respond personally within one business day. If your requirement is time-critical, call us directly.",
+    "images": [
+      "/img/og-default.png"
+    ]
+  },
+  "robots": {
+    "index": false,
+    "follow": true
+  }
+};
 
-const html = "<section class=\"page-hero\">\n<div class=\"container\">\n  <nav class=\"breadcrumb\" aria-label=\"Breadcrumb\"><ol><li><a href=\"/\">Home</a></li><li class=\"sep\" aria-hidden=\"true\">/</li><li aria-current=\"page\">Thank you</li></ol></nav>\n  <p class=\"eyebrow\">Thank you</p>\n  <h1>We've received your enquiry.</h1>\n  <p class=\"lede\">One of our founders will respond personally within one business day. If your requirement is time-critical, call us directly.</p>\n</div>\n</section>\n<section class=\"section\">\n<div class=\"container\">\n  <div class=\"btn-row\" style=\"margin-top:0\">\n    <a class=\"btn btn--primary\" href=\"tel:+917760342202\">Call +91 77603 42202</a>\n    <a class=\"btn btn--secondary\" href=\"/\">Back to home</a>\n  </div>\n  <div style=\"margin-top:var(--s-9)\">\n    <p class=\"eyebrow\">In the meantime</p>\n    <div class=\"grid grid--3\" style=\"margin-top:var(--s-5)\">\n      <a class=\"card reveal\" href=\"/about/approach\"><h3>Our approach</h3><p>How a mandate actually runs, step by step.</p><span class=\"link\">Read <svg class=\"arw\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" aria-hidden=\"true\"><path d=\"M3 8h9M8.5 4l4 4-4 4\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span></a>\n      <a class=\"card reveal\" href=\"/industries\"><h3>Industries</h3><p>The seven sectors where we hold real depth.</p><span class=\"link\">Explore <svg class=\"arw\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" aria-hidden=\"true\"><path d=\"M3 8h9M8.5 4l4 4-4 4\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span></a>\n      <a class=\"card reveal\" href=\"/about/leadership\"><h3>Leadership</h3><p>The two people who will run your mandate.</p><span class=\"link\">Meet them <svg class=\"arw\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" aria-hidden=\"true\"><path d=\"M3 8h9M8.5 4l4 4-4 4\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span></a>\n    </div>\n  </div>\n</div>\n</section>";
+const html = "<section class=\"page-hero\">\r\n<div class=\"container\">\r\n  <nav class=\"breadcrumb\" aria-label=\"Breadcrumb\"><ol><li><a href=\"/\">Home</a></li><li class=\"sep\" aria-hidden=\"true\">/</li><li aria-current=\"page\">Thank you</li></ol></nav>\r\n  <p class=\"eyebrow\">Thank you</p>\r\n  <h1>We've received your enquiry.</h1>\r\n  <p class=\"lede\">One of our founders will respond personally within one business day. If your requirement is time-critical, call us directly.</p>\r\n</div>\r\n</section>\r\n<section class=\"section\">\r\n<div class=\"container\">\r\n  <div class=\"btn-row\" style=\"margin-top:0\">\r\n    <a class=\"btn btn--primary\" href=\"tel:+917760342202\">Call +91 77603 42202</a>\r\n    <a class=\"btn btn--secondary\" href=\"/\">Back to home</a>\r\n  </div>\r\n  <div style=\"margin-top:var(--s-9)\">\r\n    <p class=\"eyebrow\">In the meantime</p>\r\n    <div class=\"grid grid--3\" style=\"margin-top:var(--s-5)\">\r\n      <a class=\"card reveal\" href=\"/about/approach\"><h3>Our approach</h3><p>How a mandate actually runs, step by step.</p><span class=\"link\">Read <svg class=\"arw\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" aria-hidden=\"true\"><path d=\"M3 8h9M8.5 4l4 4-4 4\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span></a>\r\n      <a class=\"card reveal\" href=\"/industries\"><h3>Industries</h3><p>The seven sectors where we hold real depth.</p><span class=\"link\">Explore <svg class=\"arw\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" aria-hidden=\"true\"><path d=\"M3 8h9M8.5 4l4 4-4 4\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span></a>\r\n      <a class=\"card reveal\" href=\"/about/leadership\"><h3>Leadership</h3><p>The two people who will run your mandate.</p><span class=\"link\">Meet them <svg class=\"arw\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" aria-hidden=\"true\"><path d=\"M3 8h9M8.5 4l4 4-4 4\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span></a>\r\n    </div>\r\n  </div>\r\n</div>\r\n</section>";
+
+const jsonLd = [
+  "{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://www.vysmirasolutions.com\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Thank you\",\"item\":\"https://www.vysmirasolutions.com/thank-you\"}]}"
+];
 
 export default function Page() {
-  return <PageBody nav="thank-you" html={html} />;
+  return (
+    <>
+      {jsonLd.map((block, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: block }} />
+      ))}
+      <PageBody nav="thank-you" html={html} />
+    </>
+  );
 }
